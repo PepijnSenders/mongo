@@ -13,7 +13,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Pep\\Mongo\\": "src/Pep"
+            "Pep\\Mongo\\": "src/Pep/Mongo"
         }
     },
     "require-dev": {
