@@ -44,6 +44,10 @@ class URI {
       $uri .= "/$this->database";
     }
 
+    if (!empty($this->options)) {
+      $uri .= '?' . http_build_query($this->options);
+    }
+
     return $uri;
   }
 
