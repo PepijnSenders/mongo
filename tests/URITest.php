@@ -1,21 +1,43 @@
 <?php
 
 use Pep\Mongo\URI;
+use Faker\Factory;
 
 class URITest extends PHPUnit_Framework_TestCase {
 
   public function testCreate() {
-    $uri = new URI('aap', 'staart');
+    $faker = Factory::create();
 
-    $this->assertEquals($uri->createUri(), (string) $uri, 'toString function broken');
-    $this->assertEquals((string) $uri, 'mongodb://aap:staart@localhost:27017/admin', 'Output URI not ok!');
+    $username = $faker->userName;
+    $password = $faker->userName;
 
-    $uri = new URI('aap', 'staart', 'ergens', 200, 'database', [
-      'ssl' => true,
-      'connectTimeoutMS' => 200,
+    $uri = new URI([
+      'username' => $username,
+      'password' => $password,
     ]);
 
-    $this->assertEquals((string) $uri, 'mongodb://aap:staart@ergens:200/database?ssl=1&connectTimeoutMS=200', 'Output intricate URI not ok!');
+    $this->assertEquals($uri->createUri(), (string) $uri, 'toString function broken');
+    $this->assertEquals((string) $uri, "mongodb://$username:$password@localhost:27017/admin", 'Output URI not ok!');
+
+    $host = $faker->domainName;
+    $database = $faker->userName;
+    $port = $faker->randomNumber(5);
+    $ssl = (int) $faker->boolean;
+    $connectTimeoutMS = $faker->randomNumber;
+
+    $uri = new URI([
+      'username' => $username,
+      'password' => $password,
+      'host' => $host,
+      'port' => $port,
+      'database' => $database,
+      'options' => [
+        'ssl' => $ssl,
+        'connectTimeoutMS' => $connectTimeoutMS,
+      ],
+    ]);
+
+    $this->assertEquals((string) $uri, "mongodb://$username:$password@$host:$port/$database?ssl=$ssl&connectTimeoutMS=$connectTimeoutMS", 'Output intricate URI not ok!');
   }
 
 }

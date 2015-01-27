@@ -11,20 +11,24 @@ class URI {
   private $database;
   private $options;
 
-  public function __construct(
-    $username = '',
-    $password = '',
-    $host = 'localhost',
-    $port = 27017,
-    $database = 'admin',
-    $options = []
-  ) {
-    $this->username = $username;
-    $this->password = $password;
-    $this->host = $host;
-    $this->port = $port;
-    $this->database = $database;
-    $this->options = $options;
+  private $defaults = [
+    'username' => '',
+    'password' => '',
+    'host' => 'localhost',
+    'port' => 27017,
+    'database' => 'admin',
+    'options' => [],
+  ];
+
+  public function __construct(array $options = []) {
+    $options = array_merge($this->defaults, $options);
+
+    $this->username = $options['username'];
+    $this->password = $options['password'];
+    $this->host = $options['host'];
+    $this->port = $options['port'];
+    $this->database = $options['database'];
+    $this->options = $options['options'];
   }
 
   public function createUri() {
